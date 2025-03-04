@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение кода</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <h1>Подтверждение кода</h1>
+            
+            <div id="code-form-container">
+                <p>Мы отправили код подтверждения на номер <span id="phone-display">...</span></p>
+                
+                <form id="code-form">
+                    <div class="form-group">
+                        <label for="code">Введите код из сообщения:</label>
+                        <input type="text" id="code" name="code" placeholder="12345" maxlength="5" required>
+                    </div>
+                    <button type="submit" class="btn">Подтвердить</button>
+                </form>
+                
+                <p id="timer">Повторная отправка кода будет доступна через: 60 секунд</p>
+                <button id="resend-btn" class="btn" style="display: none;">Отправить код повторно</button>
+            </div>
+            
+            <a href="index.html" class="btn" style="margin-top: 20px; background-color: #6c757d;">Назад</a>
+        </div>
+        
+        <div class="explanation">
+            <h2>Как это работает?</h2>
+            <p>В реальном приложении процесс проверки кода будет выглядеть так:</p>
+            <ol>
+                <li>Пользователь вводит номер телефона на предыдущем шаге</li>
+                <li>Ваш сервер отправляет запрос в Telegram API для отправки кода</li>
+                <li>Telegram отправляет код в приложение пользователя</li>
+                <li>Пользователь вводит полученный код для подтверждения</li>
+                <li>Ваш сервер проверяет код через Telegram API</li>
+                <li>Если код верный, пользователь авторизуется</li>
+            </ol>
+            <p><strong>Примечание:</strong> В этой демонстрации мы просто имитируем процесс. Любой код "12345" будет считаться правильным.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Получаем номер телефона из localStorage
+            const phoneNumber = localStorage.getItem('phone_number');
+            const phoneDisplay = document.getElementById('phone-display');
+            
+            if (!phoneNumber) {
+                // Если номер не найден, перенаправляем на начальную страницу
+                alert('Сначала введите номер телефона');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Отображаем номер телефона
+            phoneDisplay.textContent = phoneNumber;
+            
+            // Таймер для повторной отправки
+            let timeLeft = 60;
+            const timerElement = document.getElementById('timer');
+            const resendBtn = document.getElementById('resend-btn');
+            
+            const countdown = setInterval(function() {
+                timeLeft--;
+                timerElement.textContent = `Повторная отправка кода будет доступна через: ${timeLeft} секунд`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.style.display = 'none';
+                    resendBtn.style.display = 'inline-block';
+                }
+            }, 1000);
+            
+            // Обработчик для кнопки повторной отправки
+            resendBtn.addEventListener('click', function() {
+                alert('Новый код был отправлен. В демо-режиме используйте код 12345.');
+                resendBtn.style.display = 'none';
+                timeLeft = 60;
+                timerElement.textContent = `Повторная отправка кода будет доступна через: ${timeLeft} секунд`;
+                timerElement.style.display = 'block';
+                
+                // Перезапускаем таймер
+                const newCountdown = setInterval(function() {
+                    timeLeft--;
+                    timerElement.textContent = `Повторная отправка кода будет доступна через: ${timeLeft} секунд`;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(newCountdown);
+                        timerElement.style.display = 'none';
+                        resendBtn.style.display = 'inline-block';
+                    }
+                }, 1000);
+            });
+            
+            // Обработка формы с кодом
+            const codeForm = document.getElementById('code-form');
+            
+            codeForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const codeInput = document.getElementById('code');
+                const code = codeInput.value.trim();
+                
+                // В демо-режиме любой код "12345" считается верным
+                if (code === '12345') {
+                    // В реальном приложении здесь был бы API запрос для проверки кода
+                    alert('Код подтвержден успешно!');
+                    
+                    // Создаем демо-данные пользователя
+                    const demoUser = {
+                        id: '123456789',
+                        firstName: 'Демо',
+                        lastName: 'Пользователь',
+                        username: 'demo_user',
+                        photoUrl: '',
+                        authDate: Math.floor(Date.now() / 1000)
+                    };
+                    
+                    // Сохраняем демо-данные пользователя
+                    localStorage.setItem('telegram_user', JSON.stringify(demoUser));
+                    
+                    // Перенаправляем на страницу успешной авторизации
+                    window.location.href = 'auth-success.html';
+                } else {
+                    alert('Неверный код. В демо-режиме используйте код 12345.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
