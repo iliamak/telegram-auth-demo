@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешная авторизация - Telegram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card success-card">
+            <div class="auth-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h1>Авторизация успешна!</h1>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">
+                    <img src="" id="userAvatar" alt="Аватар">
+                </div>
+                <div class="user-details">
+                    <h2 id="userName">Имя пользователя</h2>
+                    <p id="userPhone">+7 XXX XXX-XX-XX</p>
+                </div>
+            </div>
+            
+            <div class="auth-data">
+                <h3>Данные авторизации:</h3>
+                <pre id="authData">{}</pre>
+            </div>
+            
+            <div class="form-actions">
+                <a href="/" class="btn-primary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <button id="logoutBtn" class="btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/success-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация через Telegram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fab fa-telegram telegram-icon"></i>
+                <h1>Вход через Telegram</h1>
+            </div>
+            
+            <form id="phoneForm" class="auth-form">
+                <div class="form-group">
+                    <label for="phone">Введите номер телефона</label>
+                    <div class="phone-input-container">
+                        <div class="country-code">+7</div>
+                        <input type="tel" id="phone" name="phone" placeholder="999 123-45-67" required>
+                    </div>
+                    <p class="form-hint">В международном формате: +7 XXX XXX-XX-XX</p>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i> Получить код
+                    </button>
+                </div>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Нажимая кнопку, вы соглашаетесь с обработкой данных</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
