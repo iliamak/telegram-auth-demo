@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешная авторизация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="success-container">
+            <h1>🎉 Авторизация успешна!</h1>
+            <div id="user-info">
+                <p>Загрузка данных пользователя...</p>
+            </div>
+            <a href="index.html" class="btn">Вернуться на главную</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Получаем параметры из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const userInfoDiv = document.getElementById('user-info');
+            
+            // Проверяем наличие параметров авторизации
+            if (urlParams.has('id') && urlParams.has('first_name')) {
+                const id = urlParams.get('id');
+                const firstName = urlParams.get('first_name');
+                const lastName = urlParams.get('last_name') || '';
+                const username = urlParams.get('username') || 'не указан';
+                const photoUrl = urlParams.get('photo_url') || '';
+                const authDate = urlParams.get('auth_date') || '';
+                const hash = urlParams.get('hash') || '';
+                
+                // Отображаем данные пользователя
+                let html = `
+                    <div class="user-card">
+                        ${photoUrl ? `<img src="${photoUrl}" alt="${firstName}" class="user-photo">` : ''}
+                        <div class="user-details">
+                            <h2>${firstName} ${lastName}</h2>
+                            <p><strong>ID Telegram:</strong> ${id}</p>
+                            <p><strong>Username:</strong> @${username}</p>
+                            <p><strong>Дата авторизации:</strong> ${new Date(authDate * 1000).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <p><strong>Важное примечание:</strong> В реальном приложении эти данные должны быть проверены на сервере!</p>
+                        <p>Без проверки данные могут быть подделаны. См. пример проверки в файле server.js</p>
+                    </div>
+                `;
+                userInfoDiv.innerHTML = html;
+                
+                // Сохраняем данные пользователя в localStorage для демонстрации
+                localStorage.setItem('telegram_user', JSON.stringify({
+                    id, firstName, lastName, username, photoUrl, authDate
+                }));
+            } else {
+                // Если параметров нет, проверяем localStorage
+                const savedUser = localStorage.getItem('telegram_user');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    let html = `
+                        <div class="user-card">
+                            ${user.photoUrl ? `<img src="${user.photoUrl}" alt="${user.firstName}" class="user-photo">` : ''}
+                            <div class="user-details">
+                                <h2>${user.firstName} ${user.lastName}</h2>
+                                <p><strong>ID Telegram:</strong> ${user.id}</p>
+                                <p><strong>Username:</strong> @${user.username}</p>
+                                <p><strong>Дата авторизации:</strong> ${new Date(user.authDate * 1000).toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <p>Данные загружены из localStorage (для демонстрации).</p>
+                        </div>
+                    `;
+                    userInfoDiv.innerHTML = html;
+                } else {
+                    userInfoDiv.innerHTML = `
+                        <div class="error-box">
+                            <p>Не удалось получить данные пользователя. Возможно, вы перешли на эту страницу напрямую.</p>
+                            <p>Вернитесь на главную страницу и попробуйте авторизоваться снова.</p>
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
